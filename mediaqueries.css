@@ -1,0 +1,114 @@
+/* @media screen and (max-width: 1200px){
+    #desktop-nav{
+        display: none;
+    }
+    #hamburger-nav{
+        display: flex;
+    }
+    .arrow{
+        display: none;
+    }
+    nav{
+        justify-content: space-between;
+    }
+} */
+
+@media (max-width: 480px){
+    .to-home{
+        padding: 10px 0px;
+    }
+
+    #profile{
+        border: 1px solid red;
+        padding: 0px;
+        width: 100%;
+    }
+    .sec{
+        border: 1px solid #fff;
+        padding: 10px;
+        align-items: center;
+        margin: auto;
+        /* margin: 100px 0; */
+        width: 100%;
+    }
+
+    .section-text-1{
+        font-size: .8rem;
+        margin-bottom: 15px;
+    }
+    
+    .section-text p{
+        letter-spacing: 1.5px;
+    }
+
+    .section-text-2{
+        color: #bfa181;
+        max-width: fit-content;
+        font-size: 12px;
+        margin: 60px 0 40px;
+    }
+
+    .name-widget{
+        gap: 2.5rem;
+    }
+
+    .name{
+        font-size: 2rem;
+        letter-spacing: 2px;
+        margin: 2px 0;
+    }
+    
+    .name-widget .project-btn{
+        align-content: center;
+    }
+    
+    .project-btn:hover{
+        background: none;
+    }
+    
+    .name-widget .btn{
+        font-size: 8px;
+        border-radius: 40px;
+        padding: 4px 10px;
+    }
+    
+    .name-widget .bi-arrow-right{
+        padding: 4px 5px;
+        font-weight: 600;
+        font-size: 10px;
+    }
+
+    .btn-color-1{
+    margin-top: 10px;
+    }
+
+    .name-widget .bi-arrow-right{
+        align-items: center;
+        color: #d8dfeb;
+        background: #27c393;
+        margin-left: 0px;
+        height: 8px;
+        width: 8px;
+        padding: 4px 5px;
+        font-weight: 500;
+        border-radius: 40px;
+        border: 1px solid #27c393;
+        transition: 300ms all;
+    }
+}
+
+
+/* @media (min-width: 840px  max-width: 900px){
+    .sec{
+        margin: 70px auto;
+        width: 90%;
+    }
+} */
+
+
+/* ========== skills section media queries ========== */
+@media (max-width: 480px){
+    .skill-grid{
+        width: 100%;
+    }
+}
