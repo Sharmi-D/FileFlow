@@ -1,6 +1,6 @@
 ## Live Demo
-> [Frontend:](https://fileflow-app.netlify.app)
+> [Frontend](https://fileflow-app.netlify.app)
 
-> [Backend:](https://fileflow-backend.onrender.com)
+> [Backend](https://fileflow-backend.onrender.com)
 
 
