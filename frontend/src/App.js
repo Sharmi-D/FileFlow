@@ -12,7 +12,7 @@ import {
 
 export default function App() {
   
-  const API = "http://127.0.0.1:5000";
+  const API = process.env.REACT_APP_API_URL;
 
   const [files, setFiles] = useState([]);
   const [showUpload, setShowUpload] = useState(false);
@@ -35,10 +35,11 @@ export default function App() {
       console.log(error);
     }
   };
-
   useEffect(() => {
     fetchFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // Upload file
   const uploadFile = async () => {
@@ -72,11 +73,11 @@ export default function App() {
   };
 
   // Download file
-  const downloadFile = (name) => {
-    window.open(`${API}/download/${encodeURIComponent(name)}`, "_blank");
+  const downloadFile = (url) => {
+    window.open(url, "_blank");
   };
 
-  // Detect file type
+  // Detect file
   const getType = (name) => {
     const ext = name.split(".").pop().toLowerCase();
 
@@ -86,39 +87,39 @@ export default function App() {
     return ext.toUpperCase();
   };
 
-  // Search filter
+  // Search 
   const filteredFiles = files.filter((file) =>
     file.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Create file
   const createFile = async () => {
-  if (!newFileName) {
-    alert("Enter filename");
-    return;
-  }
+    if (!newFileName) {
+      alert("Enter filename");
+      return;
+    }
 
-  try {
-    await axios.post(`${API}/create-file`, {
-      filename: newFileName,
-      content: newContent,
-    });
-
-    setShowCreate(false);
-    setNewFileName("");
-    setNewContent("");
-    fetchFiles();
-  } catch (error) {
-    console.log(error);
-    alert("Failed to create file");
-  }
-};
+    try {
+      await axios.post(`${API}/create-file`, {
+        filename: newFileName,
+        content: newContent,
+      });
+      
+      setShowCreate(false);
+      setNewFileName("");
+      setNewContent("");
+      fetchFiles();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to create file");
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-60 bg-white shadow-md p-4">
         <h1 className="text-xl font-bold mb-6">MyDrive</h1>
-
         <ul className="space-y-3">
           <li className="font-medium">Dashboard</li>
           <li className="font-medium text-blue-500">My Files</li>
@@ -130,10 +131,9 @@ export default function App() {
 
       {/* Main */}
       <div className="flex-1 p-6">
-        {/* Header */}
         <div className="flex justify-between mb-4">
-          <input
-            placeholder="Search files..."
+          <input 
+            placeholder="Search files..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="border px-3 py-2 rounded w-1/3"
@@ -143,7 +143,7 @@ export default function App() {
             onClick={() => setShowUpload(true)}
             className="bg-blue-500 text-white px-4 py-2 rounded flex items-center gap-2"
           >
-            <Upload size={18} />
+          <Upload size={18} />
             Upload
           </button>
 
@@ -196,8 +196,8 @@ export default function App() {
                       />
 
                       <Download
-                      className="cursor-pointer"
-                      onClick={() => downloadFile(file.name)}
+                        className="cursor-pointer"
+                        onClick={() => downloadFile(file.url)}
                       />
 
                       <Pencil className="cursor-pointer" />
@@ -248,17 +248,25 @@ export default function App() {
             <h2 className="font-bold text-lg mb-4">{previewFile.name}</h2>
             
             {getType(previewFile.name) === "Image" ? (
-               <img
-                 src={`${API}/preview/${previewFile.name}`}
-                 alt="preview"
-                 className="max-w-full max-h-[75vh] mx-auto rounded"
-               />
-              ) : previewFile.name.toLowerCase().endsWith(".pdf") ? (
-              <iframe
-                src={`${API}/preview/${previewFile.name}`}
-                title="pdf"
-                className="w-full h-[75vh] rounded"
-              ></iframe>
+              <img
+              src={previewFile.url}
+              alt="preview"
+              className="max-w-full max-h-[75vh] mx-auto rounded"
+              />
+            ) : previewFile.name.toLowerCase().endsWith(".pdf") ? (
+            
+            <iframe
+            src={`${previewFile.url}#view=FitH`}
+            title="pdf"
+            className="w-full h-[75vh] border rounded"
+            />
+            ) : previewFile.name.toLowerCase().endsWith(".pdf") ? (
+          
+            <embed
+              src={previewFile.url}
+              type="application/pdf"
+              className="w-full h-[75vh]"
+            />
             ) : (
             <p>No preview available for this file type</p>
             )}
@@ -322,9 +330,6 @@ export default function App() {
         </div>
       </div>
     )}
-
-
-
   </div>
   );
 }
