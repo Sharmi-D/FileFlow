@@ -5,14 +5,22 @@ on:
     branches:
       - main
 
+  pull_request:
+    branches:
+      - main
+
 jobs:
-  backend-build:
+
+  backend:
+    name: Backend Build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
@@ -21,7 +29,53 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
-      - name: Check Flask App
+      - name: Check Python Syntax
         run: |
           cd backend
           python -m py_compile app.py
+
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    needs: backend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build React App
+        run: |
+          cd frontend
+          npm run build
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+      - frontend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Backend Docker Image
+        run: |
+          docker build -t fileflow-backend ./backend
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build -t fileflow-frontend ./frontend
+
+      - name: Show Docker Images
+        run: docker images
